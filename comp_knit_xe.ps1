@@ -6,6 +6,8 @@
 # the file extension) or the path+filename in cases where the files are not in
 # the current directory.
 #
+# Dependencies: SumatraPDF
+#
 # -Joshua McNeill (joshua dot mcneill at uga dot edu)
 
 # Check if the document needs knitting and which file extension
