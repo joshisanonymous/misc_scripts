@@ -3,26 +3,45 @@
 # either .Rnw or .Rtex files.
 #
 # Usage: Provide one argument at the command line, which is the filename (without
-# the file extension) or the path+filename in cases where the files are not in
-# the current directory.
+# the file extension). N.b., the script must be run from the working directory.
 #
 # Dependencies: SumatraPDF
 #
 # -Joshua McNeill (joshua dot mcneill at uga dot edu)
 
+# Save the argument entered to a variable
+$file = $args[0]
+
 # Check if the document needs knitting and which file extension
-if (test-path -path "$($args[0]).Rnw")
+if (test-path -path "$file.Rnw")
   {
-  rscript -e "library(knitr); knit('$($args[0]).Rnw')"
+  rscript -e "library(knitr); knit('$file.Rnw')"
   }
-elseif (test-path -path "$($args[0]).Rtex")
+elseif (test-path -path "$file.Rtex")
   {
-  rscript -e "library(knitr); knit('$($args[0]).Rtex')"
+  rscript -e "library(knitr); knit('$file.Rtex')"
   }
 
 # Perform typical compilation
-xelatex "$($args[0]).tex"
-bibtex "$($args[0]).aux"
-xelatex "$($args[0]).tex"
-xelatex "$($args[0]).tex"
-sumatrapdf "$($args[0]).pdf"
+xelatex "$file.tex"
+bibtex "$file.aux"
+xelatex "$file.tex"
+xelatex "$file.tex"
+sumatrapdf "$file.pdf"
+
+# Ask the user if they want to delete files then act accordingly
+$delete = read-host "Do you want to delete generated intermediary files? (y/n)"
+
+# Cleanup
+if (($delete -match "[yY]") -and (test-path -path "$file.Rnw"))
+  {
+  remove-item "$file.tex", "$file.out", "$file.blg", "$file.bbl", "$file.aux", "$file.log"
+  remove-item "figure" -recurse
+  }
+elseif ($delete -match "[yY]")
+  {
+  remove-item "$file.out", "$file.blg", "$file.bbl", "$file.aux", "$file.log"
+  remove-item "figure" -recurse
+  }
+
+write-host "All done!"
