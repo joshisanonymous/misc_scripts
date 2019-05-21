@@ -22,10 +22,14 @@ elseif (test-path -path "$file.Rtex")
   rscript -e "library(knitr); knit('$file.Rtex')"
   }
 
-# Perform typical compilation
+# Perform typical compilation, checking if cross-references were used along
+# the way
 xelatex "$file.tex"
-bibtex "$file.aux"
-xelatex "$file.tex"
+if (! ((get-content "$file.aux") -eq $null))
+  {
+  bibtex "$file.aux"
+  xelatex "$file.tex"
+  }
 xelatex "$file.tex"
 sumatrapdf "$file.pdf"
 
