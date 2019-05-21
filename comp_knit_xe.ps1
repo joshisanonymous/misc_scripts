@@ -39,13 +39,11 @@ $delete = read-host "Do you want to delete generated intermediary files? (y/n)"
 # Cleanup
 if (($delete -match "[yY]") -and (test-path -path "$file.Rnw"))
   {
-  remove-item "$file.tex", "$file.out", "$file.blg", "$file.bbl", "$file.aux", "$file.log"
-  remove-item "figure" -recurse
+  remove-item "$file.tex", "$file.out", "$file.blg", "$file.bbl", "$file.aux", "$file.log", "$file.nav", "$file.snm", "$file.toc"
   }
 elseif ($delete -match "[yY]")
   {
-  remove-item "$file.out", "$file.blg", "$file.bbl", "$file.aux", "$file.log"
-  remove-item "figure" -recurse
+  remove-item "$file.out", "$file.blg", "$file.bbl", "$file.aux", "$file.log", "$file.nav", "$file.snm", "$file.toc"
   }
 
 write-host "All done!"
