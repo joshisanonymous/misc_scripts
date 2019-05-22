@@ -22,12 +22,17 @@ elseif (test-path -path "$file.Rtex")
   rscript -e "library(knitr); knit('$file.Rtex')"
   }
 
-# Perform typical compilation, checking if cross-references were used along
+# Perform typical compilation, checking if natbib or biblatex were used along
 # the way
 xelatex "$file.tex"
-if (! ((get-content "$file.aux") -eq $null))
+if ((get-content "$file.tex") -match "natbib")
   {
   bibtex "$file.aux"
+  xelatex "$file.tex"
+  }
+elseif ((get-content "$file.tex") -match "biblatex")
+  {
+  biber "$file"
   xelatex "$file.tex"
   }
 xelatex "$file.tex"
@@ -39,11 +44,11 @@ $delete = read-host "Do you want to delete generated intermediary files? (y/n)"
 # Cleanup
 if (($delete -match "[yY]") -and (test-path -path "$file.Rnw"))
   {
-  remove-item "$file.tex", "$file.out", "$file.blg", "$file.bbl", "$file.aux", "$file.log", "$file.nav", "$file.snm", "$file.toc"
+  remove-item "$file.tex", "$file.out", "$file.blg", "$file.bbl", "$file.aux", "$file.log", "$file.nav", "$file.snm", "$file.toc", "$file.bcf", "$file.run.xml"
   }
 elseif ($delete -match "[yY]")
   {
-  remove-item "$file.out", "$file.blg", "$file.bbl", "$file.aux", "$file.log", "$file.nav", "$file.snm", "$file.toc"
+  remove-item "$file.out", "$file.blg", "$file.bbl", "$file.aux", "$file.log", "$file.nav", "$file.snm", "$file.toc", "$file.bcf", "$file.run.xml"
   }
 
 write-host "All done!"
