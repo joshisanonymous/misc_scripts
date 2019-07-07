@@ -36,6 +36,10 @@ elseif ((get-content "$file.tex") -match "biblatex")
   xelatex "$file.tex"
   }
 xelatex "$file.tex"
+if ((get-content "$file.tex") -match "{exam}")
+  {
+  xelatex "$file.tex"
+  }
 sumatrapdf "$file.pdf"
 
 # Ask the user if they want to delete files then act accordingly
