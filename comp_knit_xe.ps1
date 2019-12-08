@@ -14,9 +14,9 @@ $file = $args[0]
 
 # Check if the document needs knitting and which file extension
 if (test-path -path "$file.Rnw") {
-  rscript -e "library(knitr); knit('$file.Rnw')"
+  rscript -e "library(knitr); knit('$file.Rnw', encoding = 'UTF-8')"
 } elseif (test-path -path "$file.Rtex") {
-  rscript -e "library(knitr); knit('$file.Rtex')"
+  rscript -e "library(knitr); knit('$file.Rtex', encoding = 'UTF-8')"
 }
 
 # Perform typical compilation, checking if natbib or biblatex were used along
