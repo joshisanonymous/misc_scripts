@@ -1,2 +1,7 @@
 # Output of scripts
 assignments.csv
+
+# virtualenv stuff
+Lib/
+Scripts/
+pyvenv.cfg
